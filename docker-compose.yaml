@@ -1,0 +1,150 @@
+services:
+  api:
+    container_name: nestjs
+    image: nestjs-dev
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # ✨ Target the dev stage
+      target: dev
+    # Mount host directory to docker container to support watch mode
+    volumes:
+      - .:/app
+      # This ensures that the NestJS container manages the node_modules folder
+      # rather than synchronizes it with the host machine
+      - /app/node_modules
+    env_file:
+      - docker.env
+    ports:
+      - 3000:3000
+    networks:
+      - nest
+    depends_on:
+      - postgres
+    command: npx nest start --watch
+
+  #  Database
+  ## PostgreSQL
+  postgres:
+    container_name: postgres
+    image: postgres:13.1-alpine
+    restart: unless-stopped
+    env_file:
+      - docker.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - nest
+
+  ## pgAdmin
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:4.30
+    restart: unless-stopped
+    env_file:
+      - docker.env
+    ports:
+      - 5050:80
+    networks:
+      - nest
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    command: /bin/sh -c "sleep 10; /entrypoint.sh"
+
+  ## Metrics
+  ## Prometheus
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.22.0
+    restart: unless-stopped
+    env_file:
+      - docker.env
+    ports:
+      - 9090:9090
+    networks:
+      - nest
+      - grafana
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  # Logging
+  ## Loki
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - grafana
+
+  ## Promtail
+  promtail:
+    image: grafana/promtail:2.9.0
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - grafana
+
+  ## Grafana
+  grafana:
+    image: grafana/grafana:7.5.7
+    ports:
+      - "3000:3000"
+    networks:
+      - grafana
+    depends_on:
+      - loki
+      - promtail
+      - prometheus
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources/
+        cat <<EOF > /etc/grafana/provisioning/datasources/datasource.yaml
+        apiVersion: 1
+        datasources:
+          - name: Loki
+            type: loki
+            access: proxy
+            url: http://loki:3100
+            basicAuth: false
+            isDefault: true
+            version: 1
+            editable: true
+          - name: Prometheus
+            type: prometheus
+            access: proxy
+            url: http://prometheus:9090
+            basicAuth: false
+            isDefault: false
+            version: 1
+            editable: true
+          - name: PostgreSQL
+            type: postgres
+            access: proxy
+            url: http://postgres:5432
+            basicAuth: false
+            isDefault: false
+            version: 1
+            editable: true
+        EOF
+        /run.sh
+
+volumes:
+  postgres:
+  pgadmin:
+  grafana:
+  loki:
+  promtail:
+
+
+networks:
+  nest:
+  grafana:
+
