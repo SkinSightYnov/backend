@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  PATIENT
+  MEDECIN
+  DERMATOLOGUE
+}
+
+enum Sexe {
+  M
+  F
+}
+
+enum statusConsultation {
+  WAITING
+  IN_PROGRESS
+  PROCESSED
+  CLOSED
+  CANCELED
+}
+
+model User {
+  id String @id @default(uuid())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  role Role
+  email String @unique
+  sexe String @default("M")
+  password String
+  rppsNumber String? @unique
+  address String?
+  city String?
+  zipCode String?
+  secuNumber String?
+  consultationsPatient Consultation[] @relation("consultationsPatient")
+  consultationsMedecin Consultation[] @relation("consultationsMedecin")
+  appoitmentsPatient Appointment[] @relation("appoitmentsPatient")
+  appoitmentsDermatologues Appointment[] @relation("appoitmentsDermatologues")
+}
+
+
+model Consultation {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  medecin User @relation("consultationsMedecin",fields: [idMedecin], references: [id])
+  idMedecin String
+  patient User @relation("consultationsPatient",fields: [idPatient], references: [id])
+  idPatient String
+  status String @default("WAITING")
+  criticity Int @default(0)
+  Files File[]
+}
+
+model File {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  consultation Consultation @relation(fields: [id], references: [id])
+  name String
+  url String
+  type FileType
+  size Int
+}
+
+enum FileType {
+  IMAGE
+  FILE
+}
+
+model Appointment {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  dermatologue User @relation("appoitmentsDermatologues",fields: [idDermatologue], references: [id])
+  idDermatologue String
+  patient User @relation("appoitmentsPatient",fields: [idPatient], references: [id])
+  idPatient String
+  date DateTime
+  status String @default("WAITING")
+  criticity Int @default(0)
+}
+
+
+
