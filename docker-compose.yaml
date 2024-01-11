@@ -97,44 +97,18 @@ services:
       - "3333:3000"
     networks:
       - grafana
+    volumes:
+      - grafana:/var/lib/grafana
+      # datasources in ./grafana/datasources.yaml
+      - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      # dashboards in ./grafana/dashboards folder
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      # # config file in ./grafana/grafana.ini
+      # - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     depends_on:
       - loki
       - promtail
       - prometheus
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        mkdir -p /etc/grafana/provisioning/datasources/
-        cat <<EOF > /etc/grafana/provisioning/datasources/datasource.yaml
-        apiVersion: 1
-        datasources:
-          - name: Loki
-            type: loki
-            access: proxy
-            url: http://loki:3100
-            basicAuth: false
-            isDefault: true
-            version: 1
-            editable: true
-          - name: Prometheus
-            type: prometheus
-            access: proxy
-            url: http://prometheus:9090
-            basicAuth: false
-            isDefault: false
-            version: 1
-            editable: true
-          - name: PostgreSQL
-            type: postgres
-            access: proxy
-            url: http://postgres:5432
-            basicAuth: false
-            isDefault: false
-            version: 1
-            editable: true
-        EOF
-        /run.sh
 
 volumes:
   postgres:
