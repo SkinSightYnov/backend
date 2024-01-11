@@ -94,7 +94,7 @@ services:
   grafana:
     image: grafana/grafana:7.5.7
     ports:
-      - "3000:3000"
+      - "3333:3000"
     networks:
       - grafana
     depends_on:

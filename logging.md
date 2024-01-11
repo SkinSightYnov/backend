@@ -10,6 +10,7 @@
 ## Create a logger
 
   ```ts
+  // logger/logger.service.ts
   import winston from 'winston';
 
   const logger = winston.createLogger({
@@ -44,6 +45,8 @@
 
 ## Set daily rotate file
 ```ts
+// logger/logger.service.ts
+
 import DailyRotateFile from 'winston-daily-rotate-file';
 // ...
 logger.configure({
@@ -63,6 +66,8 @@ logger.configure({
 ## Set up logging middleware
 
 ```ts
+// logger/logger.middleware.ts
+
 import { NestMiddleware, Injectable, Logger } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuidv4 } from 'uuid';
@@ -92,6 +97,8 @@ export class LoggerMiddleware implements NestMiddleware {
 ## Set up logging interceptor
 
 ```ts
+// logger/logger.interceptor.ts
+
 import {
   Injectable,
   NestInterceptor,
@@ -129,6 +136,8 @@ export class LoggingInterceptor implements NestInterceptor {
 ## Set up logging filter
 
 ```ts
+// logger/logger.filter.ts
+
 import {
   ExceptionFilter,
   Catch,
@@ -173,6 +182,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 ## Set up logging pipes
 
 ```ts
+// logger/logger.pipe.ts
+
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -188,6 +199,8 @@ export class LoggingPipe implements PipeTransform {
 ## Set up logging guards
 
 ```ts
+// logger/logger.guard.ts
+
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
@@ -205,6 +218,8 @@ export class LoggingGuard implements CanActivate {
 ## Set up logging decorators
 
 ```ts
+// logger/logger.decorator.ts
+
 import { SetMetadata } from '@nestjs/common';
 
 export const Logging = (message: string) => SetMetadata('message', message);

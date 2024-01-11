@@ -9,7 +9,7 @@ npm prom-client --save
 ## Create a Prometheus Client
 
 ```ts
-// metric.service.ts
+// metric/metric.service.ts
 
 import { Injectable } from '@nestjs/common';
 import { Counter, Register } from 'prom-client';
@@ -48,7 +48,7 @@ export class MetricService {
 ## Add a Middleware
 
 ```ts
-// metric.middleware.ts
+// metric/metric.middleware.ts
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -77,7 +77,7 @@ export class MetricMiddleware implements NestMiddleware {
 ## Add a Controller
 
 ```ts
-// metric.controller.ts
+// metric/metric.controller.ts
 
 import { Controller, Get } from '@nestjs/common';
 import { MetricService } from './metric.service';
@@ -97,7 +97,7 @@ export class MetricController {
 ## Add a Module
 
 ```ts
-// metric.module.ts
+// metric/metric.module.ts
 
 import { Module } from '@nestjs/common';
 import { MetricController } from './metric.controller';

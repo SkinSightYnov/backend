@@ -10,10 +10,6 @@ WORKDIR /app
 # Set to dev environment
 ENV NODE_ENV dev
 
-# Create non-root user for Docker
-RUN addgroup --system --gid 1001 node
-RUN adduser --system --uid 1001 node
-
 # Copy source code into app folder
 COPY --chown=node:node . .
 
@@ -34,9 +30,6 @@ RUN apk add --no-cache libc6-compat
 # Set to production environment
 ENV NODE_ENV production
 
-# Re-create non-root user for Docker
-RUN addgroup --system --gid 1001 node
-RUN adduser --system --uid 1001 node
 
 # In order to run the Nest CLI, we need to install the dev dependencies.
 # Nest CLI is a dev dependency.
@@ -69,10 +62,6 @@ ENV NODE_ENV production
 
 # Install PM2
 RUN npm install -g pm2
-
-# Re-create non-root user for Docker
-RUN addgroup --system --gid 1001 node
-RUN adduser --system --uid 1001 node
 
 # Copy only the necessary files
 COPY --chown=node:node --from=build /app/dist dist
