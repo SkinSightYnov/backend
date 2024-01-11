@@ -9,6 +9,8 @@ WORKDIR /app
 
 # Set to dev environment
 ENV NODE_ENV dev
+# Set the Timezone
+ENV TZ=Europe/Paris
 
 # Copy source code into app folder
 COPY --chown=node:node . .
@@ -29,6 +31,8 @@ RUN apk add --no-cache libc6-compat
 
 # Set to production environment
 ENV NODE_ENV production
+# Set the Timezone
+ENV TZ=Europe/Paris
 
 
 # In order to run the Nest CLI, we need to install the dev dependencies.
@@ -59,6 +63,8 @@ RUN apk add --no-cache libc6-compat
 
 # Set to production environment
 ENV NODE_ENV production
+# Set the Timezone
+ENV TZ=Europe/Paris
 
 # Install PM2
 RUN npm install -g pm2
