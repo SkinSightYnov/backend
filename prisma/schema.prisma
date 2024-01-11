@@ -45,8 +45,11 @@ model User {
   secuNumber String?
   consultationsPatient Consultation[] @relation("consultationsPatient")
   consultationsMedecin Consultation[] @relation("consultationsMedecin")
-  appoitmentsPatient Appointment[] @relation("appoitmentsPatient")
-  appoitmentsDermatologues Appointment[] @relation("appoitmentsDermatologues")
+  appointmentsPatient Appointment[] @relation("appointmentsPatient")
+  appointmentsDermatologues Appointment[] @relation("appointmentsDermatologues")
+  conversationsFromUser Conversation[] @relation("fromUser")
+  conversationsToUser Conversation[] @relation("toUser")
+  messages Message[]
 }
 
 
@@ -83,13 +86,47 @@ model Appointment {
   id String @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  dermatologue User @relation("appoitmentsDermatologues",fields: [idDermatologue], references: [id])
+  dermatologue User @relation("appointmentsDermatologues",fields: [idDermatologue], references: [id])
   idDermatologue String
-  patient User @relation("appoitmentsPatient",fields: [idPatient], references: [id])
+  patient User @relation("appointmentsPatient",fields: [idPatient], references: [id])
   idPatient String
   date DateTime
   status String @default("WAITING")
   criticity Int @default(0)
+}
+
+model Conversation {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  from User @relation("fromUser",fields: [idFrom], references: [id])
+  idFrom String
+  toHuman User @relation("toUser",fields: [idToUser], references: [id])
+  idToUser String
+  toIa Ia @relation(fields: [idToIa], references: [id])
+  idToIa String
+  messages Message[]
+
+}
+
+model Message {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content String
+  conversation Conversation @relation(fields: [idConversation], references: [id])
+  idConversation String
+  from User? @relation(fields: [idFrom], references: [id])
+  idFrom String?
+}
+
+model Ia{
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  model String
+  parameters Json
+  conversations Conversation[]
 }
 
 
