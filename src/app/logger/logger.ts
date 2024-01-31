@@ -1,5 +1,6 @@
-import winston from 'winston';
+import * as winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
+require('winston-daily-rotate-file');
 
 const logger = winston.createLogger({
   level: 'info',
@@ -27,17 +28,27 @@ if (process.env.NODE_ENV !== 'production') {
   );
 }
 
-logger.configure({
-  level: 'verbose',
-  transports: [
-    new DailyRotateFile({
-      filename: 'application-%DATE%.log',
-      datePattern: 'YYYY-MM-DD-HH',
-      zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
-    }),
-  ],
-});
+// logger.configure({
+//   level: 'verbose',
+//   transports: [
+//     new DailyRotateFile({
+//       filename: 'application-%DATE%.log',
+//       datePattern: 'YYYY-MM-DD-HH',
+//       zippedArchive: true,
+//       maxSize: '20m',
+//       maxFiles: '14d',
+//     }),
+//   ],
+// });
+logger.add(
+  new winston.transports.DailyRotateFile({
+    filename: 'application-%DATE%.log',
+    datePattern: 'YYYY-MM-DD-HH',
+    zippedArchive: true,
+    maxSize: '20m',
+    maxFiles: '14d',
+    level: 'verbose',
+  }),
+);
 
 export default logger;
