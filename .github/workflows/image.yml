@@ -18,4 +18,4 @@ jobs:
           REGISTRY: ${{ secrets.REGISTRY }}
           REPOSITORY: ${{ secrets.REPOSITORY }}
           IMAGE_TAG: ${{ secrets.IMAGE_TAG }}
-        run: docker build e . -t $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        run: docker build . -t $REGISTRY/$REPOSITORY:$IMAGE_TAG
