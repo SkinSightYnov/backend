@@ -10,6 +10,8 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@master
+      - name: Install dependencies
+        run: npm install
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         continue-on-error: true # To make sure that SARIF upload gets called
@@ -28,6 +30,8 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@master
+      - name: Install dependencies
+        run: npm install
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         env:
