@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: SkinSight/api:latest
+          image: skinsight/api:latest
           resources:
             requests:
               memory: "64Mi"
@@ -55,5 +55,5 @@ spec:
             httpGet:
               path: /health
               port: 3000
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
       serviceAccountName: default

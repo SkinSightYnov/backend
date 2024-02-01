@@ -16,7 +16,9 @@ ENV TZ=Europe/Paris
 COPY --chown=node:node . .
 
 # Install dependencies
-RUN npm ci
+RUN npm i
+# Generate the prisma client
+RUN npx prisma generate
 
 # Set Docker as a non-root user
 USER node
@@ -48,7 +50,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Install only the production dependencies and clean cache to optimize image size.
-RUN npm ci --only=production && npm cache clean --force
+RUN npm i --only=production && npm cache clean --force
 
 # Set Docker as a non-root user
 USER node

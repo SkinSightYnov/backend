@@ -2,12 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
   provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -31,50 +32,49 @@ enum statusConsultation {
 }
 
 model User {
-  id String @id @default(uuid())
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  role Role
-  email String @unique
-  sexe String @default("M")
-  password String
-  rppsNumber String? @unique
-  address String?
-  city String?
-  zipCode String?
-  secuNumber String?
-  consultationsPatient Consultation[] @relation("consultationsPatient")
-  consultationsMedecin Consultation[] @relation("consultationsMedecin")
-  appointmentsPatient Appointment[] @relation("appointmentsPatient")
-  appointmentsDermatologues Appointment[] @relation("appointmentsDermatologues")
-  conversationsFromUser Conversation[] @relation("fromUser")
-  conversationsToUser Conversation[] @relation("toUser")
-  messages Message[]
+  id                        String         @id @default(uuid())
+  updatedAt                 DateTime       @updatedAt
+  createdAt                 DateTime       @default(now())
+  role                      Role
+  email                     String         @unique
+  sexe                      String         @default("M")
+  password                  String
+  rppsNumber                String?        @unique
+  address                   String?
+  city                      String?
+  zipCode                   String?
+  secuNumber                String?
+  consultationsPatient      Consultation[] @relation("consultationsPatient")
+  consultationsMedecin      Consultation[] @relation("consultationsMedecin")
+  appointmentsPatient       Appointment[]  @relation("appointmentsPatient")
+  appointmentsDermatologues Appointment[]  @relation("appointmentsDermatologues")
+  conversationsFromUser     Conversation[] @relation("fromUser")
+  conversationsToUser       Conversation[] @relation("toUser")
+  messages                  Message[]
 }
 
-
 model Consultation {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  medecin User @relation("consultationsMedecin",fields: [idMedecin], references: [id])
+  medecin   User     @relation("consultationsMedecin", fields: [idMedecin], references: [id])
   idMedecin String
-  patient User @relation("consultationsPatient",fields: [idPatient], references: [id])
+  patient   User     @relation("consultationsPatient", fields: [idPatient], references: [id])
   idPatient String
-  status String @default("WAITING")
-  criticity Int @default(0)
-  Files File[]
+  status    String   @default("WAITING")
+  criticity Int      @default(0)
+  Files     File[]
 }
 
 model File {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
   consultation Consultation @relation(fields: [id], references: [id])
-  name String
-  url String
-  type FileType
-  size Int
+  name         String
+  url          String
+  type         FileType
+  size         Int
 }
 
 enum FileType {
@@ -83,51 +83,47 @@ enum FileType {
 }
 
 model Appointment {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  dermatologue User @relation("appointmentsDermatologues",fields: [idDermatologue], references: [id])
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  dermatologue   User     @relation("appointmentsDermatologues", fields: [idDermatologue], references: [id])
   idDermatologue String
-  patient User @relation("appointmentsPatient",fields: [idPatient], references: [id])
-  idPatient String
-  date DateTime
-  status String @default("WAITING")
-  criticity Int @default(0)
+  patient        User     @relation("appointmentsPatient", fields: [idPatient], references: [id])
+  idPatient      String
+  date           DateTime
+  status         String   @default("WAITING")
+  criticity      Int      @default(0)
 }
 
 model Conversation {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  from User @relation("fromUser",fields: [idFrom], references: [id])
-  idFrom String
-  toHuman User @relation("toUser",fields: [idToUser], references: [id])
-  idToUser String
-  toIa Ia @relation(fields: [idToIa], references: [id])
-  idToIa String
-  messages Message[]
-
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  from      User      @relation("fromUser", fields: [idFrom], references: [id])
+  idFrom    String
+  toHuman   User      @relation("toUser", fields: [idToUser], references: [id])
+  idToUser  String
+  toIa      Ia        @relation(fields: [idToIa], references: [id])
+  idToIa    String
+  messages  Message[]
 }
 
 model Message {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content String
-  conversation Conversation @relation(fields: [idConversation], references: [id])
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  content        String
+  conversation   Conversation @relation(fields: [idConversation], references: [id])
   idConversation String
-  from User? @relation(fields: [idFrom], references: [id])
-  idFrom String?
+  from           User?        @relation(fields: [idFrom], references: [id])
+  idFrom         String?
 }
 
-model Ia{
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  model String
-  parameters Json
+model Ia {
+  id            String         @id @default(uuid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  model         String
+  parameters    Json
   conversations Conversation[]
 }
-
-
-

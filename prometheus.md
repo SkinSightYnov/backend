@@ -3,7 +3,7 @@
 ## Install Dependencies
 
 ```bash
-npm prom-client --save
+npm i prom-client --save
 ```
 
 ## Create a Prometheus Client

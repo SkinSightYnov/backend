@@ -187,14 +187,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { Logger } from './logger.service';
 
 @Injectable()
 export class LoggingPipe implements PipeTransform {
+  private readonly logger = new Logger(LoggingPipe.name);
+
   transform(value: any, metadata: ArgumentMetadata) {
-    console.log('LoggingPipe');
+    const requestId = uuidv4();
+    this.logger.log(
+      `Request ${requestId} ${metadata.type} ${metadata.data} ${JSON.stringify(
+        value
+      )}`
+    );
     return value;
   }
 }
+
 ```
 
 ## Set up logging guards
@@ -204,13 +213,17 @@ export class LoggingPipe implements PipeTransform {
 
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import logger from './logger';
+
 
 @Injectable()
 export class LoggingGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('LoggingGuard');
+    const request = context.switchToHttp().getRequest();
+    const message = request.headers['message'];
+    logger.log(`Message: ${message}`);
     return true;
   }
 }
