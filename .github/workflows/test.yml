@@ -27,11 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Lint
-        run: npm lint
+        run: npm run lint
       - name: Test
-        run: npm test
+        run: npm run test
       - name: Coverage
-        run: npm coverage
+        run: npm run coverage
       - name: Upload coverage
         uses: actions/upload-artifact@v2
         with:
