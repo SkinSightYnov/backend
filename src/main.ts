@@ -1,16 +1,21 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app/app.module';
-import { LoggingInterceptor } from './app/logger/logger.interceptor';
-declare const module: any;
+import { AppModule } from './app.module';
+import { LoggingInterceptor } from './logger/logger.interceptor';
+import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalInterceptors(new LoggingInterceptor());
 
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
   const config = new DocumentBuilder()
     .setTitle('SkinSight')
-    .setDescription('SkinSight APi routes')
+    .setDescription('SkinSight API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
