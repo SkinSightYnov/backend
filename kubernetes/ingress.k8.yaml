@@ -1,11 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: api
+  name: api-ingress
   namespace: beta
-  annotations:
-    kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx
   rules:
     - host: kubernetes.docker.internal
       http:
@@ -14,6 +13,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: api
+                name: api-svc
                 port:
                   number: 8000

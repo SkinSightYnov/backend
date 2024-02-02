@@ -77,6 +77,11 @@ COPY --chown=node:node --from=build /app/node_modules node_modules
 # Copy the prisma folder (schema + migrations)
 COPY --chown=node:node --from=build /app/prisma prisma
 
+# Create a the logs folder
+RUN mkdir -p /app/logs
+# Give the logs folder the right permissions (read, write, execute) for the node user
+RUN chown -R node:node /app/logs
+
 # Expose the port
 EXPOSE 3000
 
