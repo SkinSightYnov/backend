@@ -77,8 +77,11 @@ COPY --chown=node:node --from=build /app/node_modules node_modules
 # Copy the prisma folder (schema + migrations)
 COPY --chown=node:node --from=build /app/prisma prisma
 
+# Expose the port
+EXPOSE 3000
+
 # Set Docker as non-root user
 USER node
 
 # Execute prisma migration and Run the app with PM2
-CMD ["npx", "prisma", "migrate", "deploy", "--preview-feature", "--schema", "prisma/schema.prisma", "&&", "pm2", "start", "dist/main.js", "-name", "nest-app", "--no-daemon"]
+CMD ["sh", "-c","echo $DATABASE_URL $DIRECT_URL && npx prisma migrate deploy --preview-feature --schema prisma/schema.prisma && pm2-runtime start dist/main.js --name nest-app"]
