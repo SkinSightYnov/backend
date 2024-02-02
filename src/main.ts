@@ -3,6 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { LoggingInterceptor } from './logger/logger.interceptor';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
