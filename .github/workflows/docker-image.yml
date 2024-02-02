@@ -7,17 +7,21 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag skinsight/api:$(date +%s)
-    # push to github package registry
-    - name: Push to GitHub Package Registry
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    # Send the image to the registry (github packages)
+    - name: Login to GitHub Packages
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-    # push to docker.pkg.github.com/skinsight/backend
-    - run: docker push skinsight/api:$(date +%s)
+
+    - name: Build and push
+      run: |
+        REPO_NAME=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')
+        docker buildx build --platform linux/amd64,linux/arm64 -t docker.pkg.github.com/$REPO_NAME/skinsight-api:latest --push .
