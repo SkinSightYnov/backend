@@ -32,4 +32,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: user/app:${{ steps.date.outputs.date }}
+        tags: r0ht/skinsight:${{ steps.date.outputs.date }}
