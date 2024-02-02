@@ -20,4 +20,4 @@ jobs:
     - name: Push to GitHub Package Registry
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
     # push to docker.pkg.github.com/skinsight/backend
-    - run: docker push docker.pkg.github.com/skinsight/backend/skinsight/api:$(date +%s)
+    - run: docker push skinsight/api:$(date +%s)
