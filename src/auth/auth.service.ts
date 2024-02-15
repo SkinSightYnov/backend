@@ -87,7 +87,7 @@ export class AuthService {
   }
 
   async createAccessToken(userId: string) {
-    return this.jwtService.sign({ userId: userId }, { expiresIn: '15m' });
+    return this.jwtService.sign({ userId: userId }, { expiresIn: '1d' });
   }
 
   async createRefreshToken(userId: string) {

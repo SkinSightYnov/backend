@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prisma, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
-export class UserEntity implements User {
-  constructor(partial: Partial<UserEntity>) {
+export class Medecin implements User {
+  constructor(partial: Partial<Medecin>) {
     Object.assign(this, partial);
   }
 
@@ -17,7 +17,7 @@ export class UserEntity implements User {
   createdAt: Date;
 
   @ApiProperty()
-  role: 'PATIENT' | 'MEDECIN' | 'DERMATOLOGUE';
+  role: 'MEDECIN';
 
   @ApiProperty()
   email: string;

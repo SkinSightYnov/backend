@@ -61,9 +61,11 @@ model Consultation {
   idMedecin String
   patient   User     @relation("consultationsPatient", fields: [idPatient], references: [id])
   idPatient String
-  status    String   @default("WAITING")
+  status    statusConsultation @default(WAITING)
   criticity Int      @default(0)
   Files     File[]
+  informations String @default("")
+  resultat String @default("")
 }
 
 model File {
