@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HealthModule } from './health/health.module';
+import { HealthModule } from './prisma/health/health.module';
 import { LoggerModule } from './logger/logger.module';
 import { MetricModule } from './metric/metric.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -10,6 +10,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ConsultationsModule } from './consultations/consultations.module';
+import { MedecinsModule } from './medecins/medecins.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     UsersModule,
     PrismaModule,
+    ConsultationsModule,
+    MedecinsModule,
   ],
   controllers: [AppController],
   providers: [
