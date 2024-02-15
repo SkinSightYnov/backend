@@ -2,7 +2,7 @@ name: Snyk Security Scan
 on:
   push:
     branches: [main, dev, 'release/*']
-  pull_request_target:
+  pull_request:
     branches: [main, dev, 'release/*']
 jobs:
   # # Snyk Security Scan : scan for vulnerabilities and create a SARIF file
