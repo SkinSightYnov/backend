@@ -7,6 +7,7 @@ declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({ origin: '*' });
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
