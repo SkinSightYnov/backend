@@ -11,7 +11,7 @@ export class MedecinsService {
     private consultationService: ConsultationsService,
   ) {}
 
-  findAll() {
+  async findAll() {
     return this.prisma.user
       .findMany({
         where: {

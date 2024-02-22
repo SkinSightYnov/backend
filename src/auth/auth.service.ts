@@ -10,6 +10,7 @@ import { AuthEntity } from './entity/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { Response } from 'express';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -39,8 +40,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const accessToken = await this.createAccessToken(user.id);
-    const refreshToken = await this.createRefreshToken(user.id);
+    const accessToken = await this.createAccessToken(user.id, user.role);
+    const refreshToken = await this.createRefreshToken(user.id, user.role);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -71,7 +72,7 @@ export class AuthService {
       throw new NotFoundException(`No user found for id: ${payload.userId}`);
     }
 
-    const refreshToken = await this.createRefreshToken(user.id);
+    const refreshToken = await this.createRefreshToken(user.id, user.role);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -79,21 +80,24 @@ export class AuthService {
       // sameSite: 'strict',
     });
 
-    const accessToken = await this.createAccessToken(user.id);
+    const accessToken = await this.createAccessToken(user.id, user.role);
 
     return {
       accessToken: accessToken,
     };
   }
 
-  async createAccessToken(userId: string) {
-    return this.jwtService.sign({ userId: userId }, { expiresIn: '1d' });
+  async createAccessToken(userId: string, role: Role) {
+    return this.jwtService.sign(
+      { userId: userId, role: role },
+      { expiresIn: '1d' },
+    );
   }
 
-  async createRefreshToken(userId: string) {
+  async createRefreshToken(userId: string, role: Role) {
     const tokenId = uuid();
     return this.jwtService.sign(
-      { userId: userId, tokenId: tokenId },
+      { userId: userId, tokenId: tokenId, role: role },
       { expiresIn: '7d' },
     );
   }

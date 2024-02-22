@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConsultationsModule } from './consultations/consultations.module';
 import { MedecinsModule } from './medecins/medecins.module';
+import { DermatologuesModule } from './dermatologues/dermatologues.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { MedecinsModule } from './medecins/medecins.module';
     PrismaModule,
     ConsultationsModule,
     MedecinsModule,
+    DermatologuesModule,
   ],
   controllers: [AppController],
   providers: [
