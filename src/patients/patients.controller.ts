@@ -5,7 +5,6 @@ import {
   UseGuards,
   Req,
   HttpException,
-  Post,
 } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { ConsultationsService } from 'src/consultations/consultations.service';

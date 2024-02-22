@@ -36,15 +36,28 @@ export class AppointmentsService {
     return this.prismaService.appointment.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} appointment`;
+  findOne(id: string) {
+    return this.prismaService.appointment.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-    return `This action updates a #${id} appointment`;
+  update(id: string, updateAppointmentDto: UpdateAppointmentDto) {
+    return this.prismaService.appointment.update({
+      where: {
+        id: id,
+      },
+      data: updateAppointmentDto as Appointment,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} appointment`;
+  remove(id: string) {
+    return this.prismaService.appointment.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }
