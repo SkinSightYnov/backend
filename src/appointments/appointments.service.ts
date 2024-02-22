@@ -30,6 +30,8 @@ export class AppointmentsService {
     });
   }
 
+  // updateStatus(appointmentId: string, status: App) {
+
   findAll() {
     return this.prismaService.appointment.findMany();
   }

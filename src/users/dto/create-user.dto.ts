@@ -14,7 +14,6 @@ import {
 //   DERMATOLOGUE = 'DERMATOLOGUE',
 // }
 export class CreateUserDto {
-
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
