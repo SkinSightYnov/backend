@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 import {
   IsEnum,
   IsNotEmpty,
@@ -7,13 +8,12 @@ import {
   MinLength,
 } from 'class-validator';
 
-export enum Role {
-  PATIENT = 'PATIENT',
-  MEDECIN = 'MEDECIN',
-  DERMATOLOGUE = 'DERMATOLOGUE',
-}
+// export enum Role {
+//   PATIENT = 'PATIENT',
+//   MEDECIN = 'MEDECIN',
+//   DERMATOLOGUE = 'DERMATOLOGUE',
+// }
 export class CreateUserDto {
-
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
