@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { MedecinsService } from './medecins.service';
 import { ConsultationsService } from 'src/consultations/consultations.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role, User, statusConsultation } from '@prisma/client';
@@ -18,6 +18,8 @@ import { updateResultatConsultationDto } from './dto/update-resultat-consultatio
 import { updateConsultationStatusDto } from './dto/update-consultation-status.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { HasRole } from 'src/auth/has-role.decorator';
+import { Medecin } from './entities/medecin.entity';
+import { ConsultationEntity } from 'src/consultations/entities/consultation.entity';
 // import { CreateMedecinDto } from './dto/create-medecin.dto';
 // import { UpdateMedecinDto } from './dto/update-medecin.dto';
 
@@ -35,16 +37,19 @@ export class MedecinsController {
   // }
 
   @Get()
+  @ApiOkResponse({ type: Medecin, isArray: true })
   async findAll() {
     return this.medecinsService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: Medecin })
   findOne(@Param('id') id: string) {
     return this.medecinsService.findOne(id);
   }
 
   @Get(':id/consultations')
+  @ApiOkResponse({ type: ConsultationEntity, isArray: true })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @HasRole(Role.MEDECIN)
   @ApiBearerAuth()

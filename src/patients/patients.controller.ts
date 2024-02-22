@@ -10,7 +10,7 @@ import {
 import { PatientsService } from './patients.service';
 import { ConsultationsService } from 'src/consultations/consultations.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from '@prisma/client';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -18,6 +18,7 @@ import { HasRole } from 'src/auth/has-role.decorator';
 import { ConsultationEntity } from 'src/consultations/entities/consultation.entity';
 
 @Controller('patients')
+@ApiTags('patients')
 export class PatientsController {
   constructor(
     private readonly patientsService: PatientsService,
@@ -31,7 +32,7 @@ export class PatientsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.patientsService.findOne(+id);
+    return this.patientsService.findOne(id);
   }
 
   @ApiBearerAuth()
@@ -64,19 +65,4 @@ export class PatientsController {
 
     return consultation;
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.patientsService.findAll();
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-  //   return this.patientsService.update(+id, updatePatientDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.patientsService.remove(+id);
-  // }
 }
