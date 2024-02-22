@@ -1,1 +1,11 @@
-node_modules/*
+# Ignore the node modules
+/node_modules
+
+# Ignore the build directory
+/dist
+
+# Ignore the coverage directory
+/coverage
+
+# Ignore the prisma migrations
+/prisma/migrations
