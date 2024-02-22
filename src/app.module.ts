@@ -13,6 +13,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConsultationsModule } from './consultations/consultations.module';
 import { MedecinsModule } from './medecins/medecins.module';
 import { DermatologuesModule } from './dermatologues/dermatologues.module';
+import { AppointmentsModule } from './appointments/appointments.module';
+import { PatientsModule } from './patients/patients.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { DermatologuesModule } from './dermatologues/dermatologues.module';
     ConsultationsModule,
     MedecinsModule,
     DermatologuesModule,
+    AppointmentsModule,
+    PatientsModule,
   ],
   controllers: [AppController],
   providers: [
