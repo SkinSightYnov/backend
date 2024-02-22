@@ -88,5 +88,5 @@ EXPOSE 3000
 # Set Docker as non-root user
 USER node
 
-# Execute prisma migration and Run the app with PM2
-CMD ["sh", "-c","echo $DATABASE_URL $DIRECT_URL && npx prisma migrate deploy --preview-feature --schema prisma/schema.prisma && pm2-runtime start dist/main.js --name nest-app"]
+# Push the prisma schema if possible and Run the app with PM2
+CMD ["sh", "-c","npx prisma migrate deploy && pm2-runtime start dist/main.js --name nest-app"]
