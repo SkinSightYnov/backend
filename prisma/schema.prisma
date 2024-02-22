@@ -16,6 +16,7 @@ enum Role {
   PATIENT
   MEDECIN
   DERMATOLOGUE
+  ADMIN
 }
 
 enum Sexe {
@@ -36,6 +37,8 @@ model User {
   updatedAt                 DateTime       @updatedAt
   createdAt                 DateTime       @default(now())
   role                      Role
+  firstName                 String
+  lastName                  String
   email                     String         @unique
   sexe                      String         @default("M")
   password                  String
@@ -66,6 +69,7 @@ model Consultation {
   Files     File[]
   informations String @default("")
   resultat String @default("")
+  appointment Appointment?
 }
 
 model File {
@@ -84,6 +88,14 @@ enum FileType {
   FILE
 }
 
+// en attente, accepter, annuler, refuser
+enum statusAppointment {
+  WAITING
+  ACCEPTED
+  CANCELED
+  REFUSED
+}
+
 model Appointment {
   id             String   @id @default(uuid())
   createdAt      DateTime @default(now())
@@ -93,8 +105,9 @@ model Appointment {
   patient        User     @relation("appointmentsPatient", fields: [idPatient], references: [id])
   idPatient      String
   date           DateTime
-  status         String   @default("WAITING")
-  criticity      Int      @default(0)
+  status         statusAppointment  @default(WAITING)
+  idConsultation String @unique
+  consultation   Consultation @relation(fields: [idConsultation], references: [id])
 }
 
 model Conversation {

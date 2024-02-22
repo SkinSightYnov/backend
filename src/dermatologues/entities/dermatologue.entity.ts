@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prisma, User } from '@prisma/client';
+import { Appointment, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class Medecin implements User {
@@ -23,7 +23,7 @@ export class Medecin implements User {
   lastName: string;
 
   @ApiProperty()
-  role: 'MEDECIN';
+  role: 'DERMATOLOGUE';
 
   @ApiProperty()
   email: string;
@@ -50,5 +50,5 @@ export class Medecin implements User {
   secuNumber: string;
 
   @ApiProperty()
-  consultationMedecin: Prisma.ConsultationCreateInput[];
+  appointmentsPatient: Appointment[];
 }
