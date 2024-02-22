@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nest-secret
+  namespace: api
+  labels:
+    app: api
+data:
+  # postgresql db in "db" namespace (k8s)
+  DATABASE_URL: postgresql://pg_user:SecurePassword@postgres.db:5432/pg_db
+  DIRECT_URL: postgresql://pg_user:SecurePassword@postgres.db:5432/pg_db
