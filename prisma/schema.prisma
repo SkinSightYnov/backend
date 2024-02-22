@@ -37,6 +37,8 @@ model User {
   updatedAt                 DateTime       @updatedAt
   createdAt                 DateTime       @default(now())
   role                      Role
+  firstName                 String
+  lastName                  String
   email                     String         @unique
   sexe                      String         @default("M")
   password                  String

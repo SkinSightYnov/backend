@@ -17,6 +17,12 @@ export class UserEntity implements User {
   createdAt: Date;
 
   @ApiProperty()
+  firstName: string;
+
+  @ApiProperty()
+  lastName: string;
+
+  @ApiProperty()
   role: Role;
 
   @ApiProperty()

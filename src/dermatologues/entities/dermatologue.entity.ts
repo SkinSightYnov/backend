@@ -17,6 +17,12 @@ export class Medecin implements User {
   createdAt: Date;
 
   @ApiProperty()
+  firstName: string;
+
+  @ApiProperty()
+  lastName: string;
+
+  @ApiProperty()
   role: 'DERMATOLOGUE';
 
   @ApiProperty()

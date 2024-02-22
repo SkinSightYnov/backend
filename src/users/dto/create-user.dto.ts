@@ -13,6 +13,17 @@ export enum Role {
   DERMATOLOGUE = 'DERMATOLOGUE',
 }
 export class CreateUserDto {
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  firstName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  lastName: string;
+
   @IsOptional()
   @IsEnum(Role)
   @ApiProperty({
