@@ -15,6 +15,7 @@ import { User } from '@prisma/client';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { HasRole } from 'src/auth/has-role.decorator';
 import { ConsultationEntity } from 'src/consultations/entities/consultation.entity';
+import { PatientEntity } from './entities/patient.entity';
 
 @Controller('patients')
 @ApiTags('patients')
@@ -25,11 +26,13 @@ export class PatientsController {
   ) {}
 
   @Get()
+  @ApiOkResponse({ type: PatientEntity, isArray: true })
   findAll() {
     return this.patientsService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: PatientEntity })
   findOne(@Param('id') id: string) {
     return this.patientsService.findOne(id);
   }
@@ -37,6 +40,7 @@ export class PatientsController {
   @ApiBearerAuth()
   @HasRole('PATIENT', 'ADMIN')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOkResponse({ type: ConsultationEntity, isArray: true })
   @Get(':id/consultations')
   getConsultationsByPatientId(@Param('id') id: string) {
     return this.consultationService.getConsultationsByPatientId(id);

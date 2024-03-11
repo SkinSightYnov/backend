@@ -10,29 +10,34 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { AppointmentEntity } from './entities/appointment.entity';
 
 @Controller('appointments')
-@ApiTags('patients')
+@ApiTags('Appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
+  @ApiCreatedResponse({ type: CreateAppointmentDto })
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentsService.create(createAppointmentDto);
   }
 
   @Get()
+  @ApiOkResponse({ isArray: true, type: AppointmentEntity })
   findAll() {
     return this.appointmentsService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: AppointmentEntity })
   findOne(@Param('id') id: string) {
     return this.appointmentsService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiCreatedResponse({ type: UpdateAppointmentDto })
   update(
     @Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
