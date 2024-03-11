@@ -3,12 +3,14 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { LoggingInterceptor } from './logger/logger.interceptor';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import { SanitizerGuard } from './sanitizer.guard';
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({ origin: '*' });
   app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalGuards(new SanitizerGuard());
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

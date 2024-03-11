@@ -5,19 +5,20 @@ import {
   UseGuards,
   Req,
   HttpException,
-  Post,
 } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { ConsultationsService } from 'src/consultations/consultations.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from '@prisma/client';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { HasRole } from 'src/auth/has-role.decorator';
 import { ConsultationEntity } from 'src/consultations/entities/consultation.entity';
+import { PatientEntity } from './entities/patient.entity';
 
 @Controller('patients')
+@ApiTags('patients')
 export class PatientsController {
   constructor(
     private readonly patientsService: PatientsService,
@@ -25,18 +26,21 @@ export class PatientsController {
   ) {}
 
   @Get()
+  @ApiOkResponse({ type: PatientEntity, isArray: true })
   findAll() {
     return this.patientsService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: PatientEntity })
   findOne(@Param('id') id: string) {
-    return this.patientsService.findOne(+id);
+    return this.patientsService.findOne(id);
   }
 
   @ApiBearerAuth()
   @HasRole('PATIENT', 'ADMIN')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOkResponse({ type: ConsultationEntity, isArray: true })
   @Get(':id/consultations')
   getConsultationsByPatientId(@Param('id') id: string) {
     return this.consultationService.getConsultationsByPatientId(id);
@@ -64,19 +68,4 @@ export class PatientsController {
 
     return consultation;
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.patientsService.findAll();
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-  //   return this.patientsService.update(+id, updatePatientDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.patientsService.remove(+id);
-  // }
 }

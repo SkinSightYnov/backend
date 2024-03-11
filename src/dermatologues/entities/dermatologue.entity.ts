@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Appointment, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
-export class Medecin implements User {
-  constructor(partial: Partial<Medecin>) {
+export class DermatologueEntity implements User {
+  constructor(partial: Partial<DermatologueEntity>) {
     Object.assign(this, partial);
   }
 
