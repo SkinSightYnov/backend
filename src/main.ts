@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { LoggingInterceptor } from './logger/logger.interceptor';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { SanitizerGuard } from './sanitizer.guard';
+import helmet from 'helmet';
 declare const module: any;
 
 async function bootstrap() {
@@ -11,6 +12,7 @@ async function bootstrap() {
   app.enableCors({ origin: '*' });
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalGuards(new SanitizerGuard());
+  app.use(helmet());
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

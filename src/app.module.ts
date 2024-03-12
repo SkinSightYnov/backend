@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { HealthModule } from './prisma/health/health.module';
 import { LoggerModule } from './logger/logger.module';
 import { MetricModule } from './metric/metric.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './logger/logger.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -15,9 +15,16 @@ import { MedecinsModule } from './medecins/medecins.module';
 import { DermatologuesModule } from './dermatologues/dermatologues.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { PatientsModule } from './patients/patients.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 150,
+      },
+    ]),
     UsersModule,
     HealthModule,
     LoggerModule,
@@ -38,6 +45,10 @@ import { PatientsModule } from './patients/patients.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })

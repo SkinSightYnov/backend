@@ -4,7 +4,6 @@
 [![Snyk Security Scan](https://github.com/SkinSightYnov/backend/actions/workflows/snyk.yml/badge.svg)](https://github.com/SkinSightYnov/backend/actions/workflows/snyk.yml)
 
 
-
 ## Description
 
 ...
@@ -13,6 +12,9 @@
 
 ```bash
 $ npm install
+
+$ npx prisma generate : génération des types
+
 ```
 
 ## Running the app
