@@ -12,9 +12,18 @@
 
 ```bash
 $ npm install
+```
 
-$ npx prisma generate : génération des types
+### Génération de types ( lié à Prisma )
 
+```bash
+$ npx prisma generate
+```
+
+### Migration de la base ( dev )
+
+```bash
+$ npx prisma migrate dev
 ```
 
 ## Running the app
@@ -42,3 +51,13 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## génération de la documentation technique
+
+```bash
+
+$ npx @compodoc/compodoc -p tsconfig.json -s
+
+```
+
+ensuite la documentation est disponible sur le port 8080

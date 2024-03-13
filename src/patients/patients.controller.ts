@@ -16,6 +16,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { HasRole } from 'src/auth/has-role.decorator';
 import { ConsultationEntity } from 'src/consultations/entities/consultation.entity';
 import { PatientEntity } from './entities/patient.entity';
+import { AppointmentEntity } from 'src/appointments/entities/appointment.entity';
 
 @Controller('patients')
 @ApiTags('patients')
@@ -68,4 +69,14 @@ export class PatientsController {
 
     return consultation;
   }
+
+  @ApiBearerAuth()
+  @HasRole('PATIENT', 'ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get(':id/appointments')
+  @ApiOkResponse({ type: AppointmentEntity, isArray: true })
+  getAppointmentsByPatientId(@Param('id') id: string) {
+    return this.patientsService.getAppointmentsByPatientId(id);
+  }
+
 }
