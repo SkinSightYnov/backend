@@ -78,5 +78,4 @@ export class PatientsController {
   getAppointmentsByPatientId(@Param('id') id: string) {
     return this.patientsService.getAppointmentsByPatientId(id);
   }
-
 }

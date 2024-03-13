@@ -8,7 +8,6 @@ import {
   Patch,
   Param,
   Delete,
-  ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -48,7 +47,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
-  async findOne(@Param('id', ParseIntPipe) id: string) {
+  async findOne(@Param('id') id: string) {
     return new UserEntity(await this.usersService.findOne(id));
   }
 
@@ -56,10 +55,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: UserEntity })
-  async update(
-    @Param('id', ParseIntPipe) id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return new UserEntity(await this.usersService.update(id, updateUserDto));
   }
 
@@ -67,7 +63,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
-  async remove(@Param('id', ParseIntPipe) id: string) {
+  async remove(@Param('id') id: string) {
     return new UserEntity(await this.usersService.remove(id));
   }
 }
