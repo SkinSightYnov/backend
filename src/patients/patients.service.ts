@@ -21,4 +21,12 @@ export class PatientsService {
       },
     });
   }
+
+  async getAppointmentsByPatientId(patientId: string) {
+    return await this.prismaService.appointment.findMany({
+      where: {
+        idPatient: patientId,
+      },
+    });
+  }
 }
